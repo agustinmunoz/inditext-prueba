@@ -1,0 +1,132 @@
+openapi: 3.0.3
+info:
+  title: Swagger Inditex Test - OpenAPI 3.0
+  description: |-
+    This is a sample Inditex Test based on the OpenAPI 3.0 specification.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8080
+paths:
+  /prices:
+    get:
+      tags:
+        - Inditex Precio
+      summary: Obtiene Precios por fecha, Id Producto y Ramo
+      description: Obtiene Precios por fecha, Id Producto y Ramo
+      operationId: getPrices
+      parameters:
+        - name: productId
+          in: query
+          description: Identificador del producto
+          required: true
+          schema:
+            type: integer
+        - name: brandId
+          in: query
+          description: Ramo del Producto
+          required: true
+          schema:
+            type: integer
+        - name: fecha
+          in: query
+          description: Fecha de la consulta
+          required: true
+          schema:
+            type: string
+            format: date-time
+            example: '2017-07-21T17:32:28Z'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrecioResource"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inditex_error_response"        
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inditex_error_response"
+        '500':
+          description: Error Interno
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inditex_error_response"
+components:
+  schemas:    
+    PrecioResource:
+      properties:
+        productId:
+          type: integer
+          format: int64
+          example: 1
+        productName:
+          type: string
+          example: Camisa Verde 
+        ofertaId:
+          type: integer
+          format: int64
+          example: 1
+        ofertaName:
+          type: string
+          example: Oferta Primavera 
+        ofertaPrioridad:
+          type: integer
+          example: 1    
+        brandId:
+          type: integer
+          example: 1
+        brandName:
+          type: string
+          example: ZARA  
+        tarifaId:
+          type: integer
+          example: 3
+        tarifaName:
+          type: string
+          example: Cliente Preferente Tarifa 1  
+        startDate:
+          type: string
+          example: 2020-04-02T23:00:01
+        endDate:
+          type: string
+          example: 2020-04-02T23:00:01
+        price:
+          type: number
+          format: double
+          multipleOf: 0.01
+          example: 23.21
+        curr:
+          type: string
+          example: EUR      
+    inditex_error_response:
+      properties:
+        timestamp:
+          type: string
+          example: 1
+          description: fecha en la que se produce el error
+        error:
+          type: string
+          example: Inditex Error Code 0077
+          description: codigo interno del error
+        message:
+          type: string
+          example: Not Found
+          description: Mensaje descriptivo del error
